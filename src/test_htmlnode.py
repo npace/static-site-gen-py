@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode
 
 class TestHTMLNode(unittest.TestCase):
     def test_eq_empty(self):
@@ -36,6 +36,19 @@ class TestHTMLNode(unittest.TestCase):
         self.assertEqual(repr(empty_node), "HTMLNode(None, None, None, None)")
         self.assertEqual(repr(node), "HTMLNode(<a>, some link, [HTMLNode(<b>, bold part, None, None)], {'href': 'https://www.google.com', 'target': '_blank'})")
 
+class TestLeafNode(unittest.TestCase):
+    def test_to_html(self):
+        paragraph = LeafNode("p", "A paragraph of text.")
+        link = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
+        self.assertEqual(paragraph.to_html(), '<p>A paragraph of text.</p>')
+        self.assertEqual(link.to_html(), '<a href="https://www.google.com">Click me!</a>')
+
+    def test_no_tag_to_html(self):
+        self.assertEqual(LeafNode(None, "some raw text").to_html(), "some raw text")
+    
+    def test_no_value_to_html(self):
+        with self.assertRaisesRegex(ValueError, "Invalid HTML: no value"):
+            LeafNode("p", None).to_html()
 
 if __name__ == "__main__":
     unittest.main()
