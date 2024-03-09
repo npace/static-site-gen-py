@@ -108,6 +108,12 @@ class TestLeafNode(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Invalid HTML: no value"):
             LeafNode("p", None).to_html()
 
+    def test_repr(self):
+        self.assertEqual(
+            repr(LeafNode("b", "bold", {"some": "prop"})),
+            "LeafNode(b, bold, {'some': 'prop'})",
+        )
+
 
 class TestParentNode(unittest.TestCase):
     def test_to_html(self):
@@ -147,6 +153,21 @@ class TestParentNode(unittest.TestCase):
     def test_no_tag_to_html(self):
         with self.assertRaisesRegex(ValueError, ("Invalid HTML: no tag")):
             ParentNode(None, None).to_html()
+
+    def test_repr(self):
+        node = ParentNode(
+            "div",
+            [
+                ParentNode(
+                    "span",
+                    [LeafNode("b", "Bold text")],
+                )
+            ],
+        )
+        self.assertEqual(
+            repr(node),
+            "ParentNode(div, [ParentNode(span, [LeafNode(b, Bold text, None)], None)], None)",
+        )
 
 
 if __name__ == "__main__":
