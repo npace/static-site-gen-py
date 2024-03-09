@@ -1,6 +1,7 @@
 import unittest
 
-from htmlnode import HTMLNode, LeafNode, ParentNode
+from htmlnode import HTMLNode, LeafNode, ParentNode, text_node_to_html_node
+from textnode import TextNode
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -168,6 +169,46 @@ class TestParentNode(unittest.TestCase):
             repr(node),
             "ParentNode(div, [ParentNode(span, [LeafNode(b, Bold text, None)], None)], None)",
         )
+
+
+class TestTextNodeToHtmlNode(unittest.TestCase):
+    def test_normal_text(self):
+        node = TextNode("normal text", "text_type_text")
+        self.assertEqual(text_node_to_html_node(node), LeafNode(None, "normal text"))
+
+    def test_bold_text(self):
+        node = TextNode("bold text", "text_type_bold")
+        self.assertEqual(text_node_to_html_node(node), LeafNode("b", "bold text"))
+
+    def test_italic_text(self):
+        node = TextNode("italic text", "text_type_italic")
+        self.assertEqual(text_node_to_html_node(node), LeafNode("i", "italic text"))
+
+    def test_code_text(self):
+        node = TextNode("code text", "text_type_code")
+        self.assertEqual(text_node_to_html_node(node), LeafNode("code", "code text"))
+
+    def test_link(self):
+        node = TextNode("some link", "text_type_link", "www.url.com")
+        self.assertEqual(
+            text_node_to_html_node(node),
+            LeafNode("a", "some link", {"href": "www.url.com"}),
+        )
+
+    def test_image(self):
+        node = TextNode("image text", "text_type_image", "www.url.com/img.jpg")
+        self.assertEqual(
+            text_node_to_html_node(node),
+            LeafNode("img", "", {"src": "www.url.com/img.jpg", "alt": "image text"}),
+        )
+
+    def test_unknown(self):
+        node = TextNode("some text", "text_type_asdf")
+        with self.assertRaisesRegex(
+            ValueError,
+            "Unknown text node type: text_type_asdf",
+        ):
+            text_node_to_html_node(node)
 
 
 if __name__ == "__main__":
