@@ -108,5 +108,46 @@ class TestLeafNode(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Invalid HTML: no value"):
             LeafNode("p", None).to_html()
 
+
+class TestParentNode(unittest.TestCase):
+    def test_to_html(self):
+        node = ParentNode(
+            "p",
+            [
+                LeafNode("b", "Bold text"),
+                LeafNode(None, "Normal text"),
+                LeafNode("i", "italic text"),
+                LeafNode(None, "Normal text"),
+            ],
+        )
+        self.assertEqual(
+            node.to_html(),
+            "<p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>",
+        )
+
+    def test_nested_to_html(self):
+        node = ParentNode(
+            "div",
+            [
+                ParentNode(
+                    "span",
+                    [LeafNode("b", "Bold text")],
+                )
+            ],
+        )
+        self.assertEqual(
+            node.to_html(),
+            "<div><span><b>Bold text</b></span></div>",
+        )
+
+    def test_no_children_to_html(self):
+        with self.assertRaisesRegex(ValueError, ("ParentNode must have children")):
+            ParentNode("p", None).to_html()
+
+    def test_no_tag_to_html(self):
+        with self.assertRaisesRegex(ValueError, ("Invalid HTML: no tag")):
+            ParentNode(None, None).to_html()
+
+
 if __name__ == "__main__":
     unittest.main()

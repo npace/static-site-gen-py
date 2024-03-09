@@ -48,3 +48,19 @@ class LeafNode(HTMLNode):
         if has_tag:
             html += self.close_tag_to_html()
         return html
+
+
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag, None, children, props)
+
+    def to_html(self):
+        if not self.tag:
+            raise ValueError("Invalid HTML: no tag")
+        if not self.children:
+            raise ValueError("ParentNode must have children")
+
+        children_html = list(map(lambda child: child.to_html(), self.children))
+        return (
+            self.open_tag_to_html() + "".join(children_html) + self.close_tag_to_html()
+        )
