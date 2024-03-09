@@ -15,6 +15,12 @@ class HTMLNode:
         items_html = list(map(lambda item: f' {item[0]}="{item[1]}"', items))
         return "".join(items_html)
     
+    def open_tag_to_html(self):
+        return f"<{self.tag}{self.props_to_html()}>"
+    
+    def close_tag_to_html(self):
+        return f"</{self.tag}>"
+
     def __eq__(self, __value: object) -> bool:
         return (self.tag == __value.tag
             and self.value == __value.value
@@ -35,8 +41,8 @@ class LeafNode(HTMLNode):
         html = ''
         has_tag = self.tag != None and len(self.tag) > 0
         if has_tag:
-            html += f"<{self.tag}{self.props_to_html()}>"
+            html += self.open_tag_to_html()
         html += self.value
         if has_tag:
-            html += f"</{self.tag}>"
+            html += self.close_tag_to_html()
         return html
