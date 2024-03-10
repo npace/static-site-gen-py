@@ -1,7 +1,15 @@
 import unittest
 
 from htmlnode import HTMLNode, LeafNode, ParentNode, text_node_to_html_node
-from textnode import TextNode
+from textnode import (
+    TextNode,
+    text_type_text,
+    text_type_bold,
+    text_type_italic,
+    text_type_code,
+    text_type_link,
+    text_type_image,
+)
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -173,30 +181,30 @@ class TestParentNode(unittest.TestCase):
 
 class TestTextNodeToHtmlNode(unittest.TestCase):
     def test_normal_text(self):
-        node = TextNode("normal text", "text_type_text")
+        node = TextNode("normal text", text_type_text)
         self.assertEqual(text_node_to_html_node(node), LeafNode(None, "normal text"))
 
     def test_bold_text(self):
-        node = TextNode("bold text", "text_type_bold")
+        node = TextNode("bold text", text_type_bold)
         self.assertEqual(text_node_to_html_node(node), LeafNode("b", "bold text"))
 
     def test_italic_text(self):
-        node = TextNode("italic text", "text_type_italic")
+        node = TextNode("italic text", text_type_italic)
         self.assertEqual(text_node_to_html_node(node), LeafNode("i", "italic text"))
 
     def test_code_text(self):
-        node = TextNode("code text", "text_type_code")
+        node = TextNode("code text", text_type_code)
         self.assertEqual(text_node_to_html_node(node), LeafNode("code", "code text"))
 
     def test_link(self):
-        node = TextNode("some link", "text_type_link", "www.url.com")
+        node = TextNode("some link", text_type_link, "www.url.com")
         self.assertEqual(
             text_node_to_html_node(node),
             LeafNode("a", "some link", {"href": "www.url.com"}),
         )
 
     def test_image(self):
-        node = TextNode("image text", "text_type_image", "www.url.com/img.jpg")
+        node = TextNode("image text", text_type_image, "www.url.com/img.jpg")
         self.assertEqual(
             text_node_to_html_node(node),
             LeafNode("img", "", {"src": "www.url.com/img.jpg", "alt": "image text"}),

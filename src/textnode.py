@@ -1,3 +1,11 @@
+text_type_text = "TEXT"
+text_type_bold = "BOLD"
+text_type_italic = "ITALIC"
+text_type_code = "CODE"
+text_type_link = "LINK"
+text_type_image = "IMAGE"
+
+
 class TextNode:
     def __init__(self, text, text_type, url=None):
         self.text = text
