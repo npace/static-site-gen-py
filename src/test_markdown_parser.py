@@ -11,6 +11,14 @@ from markdown_parser import split_nodes_delimiter
 
 
 class TestSplitDelimiter(unittest.TestCase):
+    def test_raise_error_if_tag_not_closed(self):
+        node = TextNode("Text with *open tag", text_type_text)
+        with self.assertRaises(ValueError) as cm:
+            split_nodes_delimiter([node], "*", text_type_italic)
+        self.assertEqual(
+            cm.exception.args[0], "Invalid markdown, needs matching * ITALIC delimiters"
+        )
+
     def test_split_just_adds_non_TextNode_objects(self):
         not_node = "foo"
         self.__assert_split_result(

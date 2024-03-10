@@ -8,6 +8,10 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             split = node.text.split(delimiter)
             if len(split) == 1:
                 new_nodes.append(node)
+            elif len(split) % 2 == 0:
+                raise ValueError(
+                    f"Invalid markdown, needs matching {delimiter} {text_type} delimiters"
+                )
             else:
                 is_inline = False
                 for split_text in split:
