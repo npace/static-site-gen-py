@@ -7,7 +7,11 @@ from textnode import (
     text_type_code,
     text_type_italic,
 )
-from markdown_parser import split_nodes_delimiter
+from markdown_parser import (
+    split_nodes_delimiter,
+    extract_markdown_images,
+    extract_markdown_links,
+)
 
 
 class TestSplitDelimiter(unittest.TestCase):
@@ -102,6 +106,36 @@ class TestSplitDelimiter(unittest.TestCase):
     def __assert_split_result(self, actual, expected):
         self.assertEqual(
             actual, expected, f"\nExpected:\n{expected}\nbut got:\n{actual}"
+        )
+
+
+class TestExtractImages(unittest.TestCase):
+    def test_extract_no_images(self):
+        self.assertEqual(extract_markdown_images("text without images"), [])
+
+    def test_extract_images(self):
+        text = "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and ![another](https://www.image.com/foo.jpg)"
+        self.assertEqual(
+            extract_markdown_images(text),
+            [
+                ("image", "https://i.imgur.com/zjjcJKZ.png"),
+                ("another", "https://www.image.com/foo.jpg"),
+            ],
+        )
+
+
+class TestExtractLinks(unittest.TestCase):
+    def test_extract_no_links(self):
+        self.assertEqual(extract_markdown_links("text without links"), [])
+
+    def test_extract_links(self):
+        text = "This is text with a [link](https://www.example.com) and [another](https://www.example.com/another)"
+        self.assertEqual(
+            extract_markdown_links(text),
+            [
+                ("link", "https://www.example.com"),
+                ("another", "https://www.example.com/another"),
+            ],
         )
 
 
