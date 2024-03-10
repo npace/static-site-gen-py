@@ -44,7 +44,7 @@ def extract_markdown_images(text):
 
 
 def extract_markdown_links(text):
-    regex = r"\[(.*?)\]\((.*?)\)"
+    regex = r"(?<!!)\[(.*?)\]\((.*?)\)"
     links = re.findall(regex, text)
     return links
 
@@ -63,6 +63,8 @@ def split_url_nodes(node, type, extract, generate_split_token):
                 nodes.append(TextNode(split[0], node.text_type))
             nodes.append(split_node)
             current_text = split[-1]
+        if len(current_text) > 0:
+            nodes.append(TextNode(current_text, node.text_type))
     return nodes
 
 

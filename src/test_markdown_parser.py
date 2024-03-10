@@ -127,6 +127,25 @@ class TestSplitImage(TestSplitBase):
         node = TextNode("some text without an image", text_type_text)
         self.assert_split_result(split_nodes_image([node]), [node])
 
+    def test_split_image_preserves_trailing_link(self):
+        node = TextNode(
+            "![Leading image](https://www.image.com/example.jpg) and a [trailing link](https://www.example.com)",
+            text_type_text,
+        )
+        self.assert_split_result(
+            split_nodes_image([node]),
+            [
+                TextNode(
+                    "Leading image",
+                    text_type_image,
+                    "https://www.image.com/example.jpg",
+                ),
+                TextNode(
+                    " and a [trailing link](https://www.example.com)", text_type_text
+                ),
+            ],
+        )
+
     def test_splits_image_with_text(self):
         node = TextNode(
             "![Leading image](https://www.image.com/example.jpg) with an inline ![image](https://i.imgur.com/zjjcJKZ.png) and a ![trailing image](https://i.imgur.com/3elNhQu.png)",
@@ -161,6 +180,22 @@ class TestSplitLink(TestSplitBase):
     def test_split_link_just_adds_TextNode_without_link(self):
         node = TextNode("some text without a link", text_type_text)
         self.assert_split_result(split_nodes_link([node]), [node])
+
+    def test_split_link_preserves_trailing_image(self):
+        node = TextNode(
+            "[Leading link](https://www.example.com) and a ![trailing image](https://www.example.com/image.jpg)",
+            text_type_text,
+        )
+        self.assert_split_result(
+            split_nodes_link([node]),
+            [
+                TextNode("Leading link", text_type_link, "https://www.example.com"),
+                TextNode(
+                    " and a ![trailing image](https://www.example.com/image.jpg)",
+                    text_type_text,
+                ),
+            ],
+        )
 
     def test_splits_link_with_text(self):
         node = TextNode(
