@@ -20,3 +20,56 @@ def text_to_blocks(text):
         block = block.strip()
         filtered_blocks.append(block)
     return filtered_blocks
+
+
+def block_to_block_type(block):
+    if block.startswith("# "):
+        return block_type_heading_1
+    elif block.startswith("## "):
+        return block_type_heading_2
+    elif block.startswith("### "):
+        return block_type_heading_3
+    elif block.startswith("#### "):
+        return block_type_heading_4
+    elif block.startswith("##### "):
+        return block_type_heading_5
+    elif block.startswith("###### "):
+        return block_type_heading_6
+    elif block.startswith("```") and block.endswith("```"):
+        return block_type_code
+    else:
+        lines = block.split("\n")
+        if is_valid_unordered_list(lines):
+            return block_type_unordered_list
+        elif is_valid_ordered_list(lines):
+            return block_type_ordered_list
+        elif is_valid_quote(lines):
+            return block_type_quote
+    return block_type_paragraph
+
+
+def is_valid_unordered_list(lines):
+    for line in lines:
+        line = line.strip()
+        if not (line.startswith("* ") or line.startswith("- ")):
+            return False
+    return True
+
+
+def is_valid_ordered_list(lines):
+    order = 1
+    for line in lines:
+        line = line.strip()
+        if not line.startswith(f"{order}. "):
+            return False
+        else:
+            order += 1
+    return True
+
+
+def is_valid_quote(lines):
+    for line in lines:
+        line = line.strip()
+        if not line.startswith(">"):
+            return False
+    return True
