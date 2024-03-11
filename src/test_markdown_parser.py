@@ -147,6 +147,25 @@ class TestSplitImage(TestSplitBase):
             ],
         )
 
+    def test_split_image_preserves_leading_link(self):
+        node = TextNode(
+            "[Leading link](https://www.example.com) and a ![trailing image](https://www.image.com/example.jpg)",
+            text_type_text,
+        )
+        self.assert_split_result(
+            split_nodes_image([node]),
+            [
+                TextNode(
+                    "[Leading link](https://www.example.com) and a ", text_type_text
+                ),
+                TextNode(
+                    "trailing image",
+                    text_type_image,
+                    "https://www.image.com/example.jpg",
+                ),
+            ],
+        )
+
     def test_splits_image_with_text(self):
         node = TextNode(
             "![Leading image](https://www.image.com/example.jpg) with an inline ![image](https://i.imgur.com/zjjcJKZ.png) and a ![trailing image](https://i.imgur.com/3elNhQu.png)",
@@ -194,6 +213,26 @@ class TestSplitLink(TestSplitBase):
                 TextNode(
                     " and a ![trailing image](https://www.example.com/image.jpg)",
                     text_type_text,
+                ),
+            ],
+        )
+
+    def test_split_link_preserves_leading_image(self):
+        node = TextNode(
+            "![Leading image](https://www.example.com/image.jpg) and a [trailing link](https://www.example.com)",
+            text_type_text,
+        )
+        self.assert_split_result(
+            split_nodes_link([node]),
+            [
+                TextNode(
+                    "![Leading image](https://www.example.com/image.jpg) and a ",
+                    text_type_text,
+                ),
+                TextNode(
+                    "trailing link",
+                    text_type_link,
+                    "https://www.example.com",
                 ),
             ],
         )
