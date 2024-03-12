@@ -117,6 +117,12 @@ class TestLeafNode(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Invalid HTML: no value"):
             LeafNode("p", None).to_html()
 
+    def test_img_no_value_to_html(self):
+        img = LeafNode("img", None, {"url": "https://www.image.com/example.jpg"})
+        self.assertEqual(
+            img.to_html(), '<img url="https://www.image.com/example.jpg"></img>'
+        )
+
     def test_repr(self):
         self.assertEqual(
             repr(LeafNode("b", "bold", {"some": "prop"})),

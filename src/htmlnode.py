@@ -48,13 +48,14 @@ class LeafNode(HTMLNode):
         super().__init__(tag, value, None, props)
 
     def to_html(self):
-        if not self.value:
+        if not self.value and self.tag != "img":
             raise ValueError("Invalid HTML: no value")
         html = ""
         has_tag = self.tag != None and len(self.tag) > 0
         if has_tag:
             html += self.open_tag_to_html()
-        html += self.value
+        if self.value:
+            html += self.value
         if has_tag:
             html += self.close_tag_to_html()
         return html
