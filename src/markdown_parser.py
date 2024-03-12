@@ -17,7 +17,7 @@ def __split_or_default(old_nodes, split_node):
             split_nodes = split_node(node)
             new_nodes.extend(split_nodes)
         else:
-            new_nodes.append(node)
+            raise TypeError(f"{node} is not an instance of TextNode!")
     return new_nodes
 
 

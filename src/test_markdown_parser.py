@@ -36,12 +36,9 @@ class TestSplitDelimiter(TestSplitBase):
             cm.exception.args[0], "Invalid markdown, needs matching * ITALIC delimiters"
         )
 
-    def test_split_text_just_adds_non_TextNode_objects(self):
-        not_node = "foo"
-        self.assert_split_result(
-            split_nodes_delimiter([not_node], None, None),
-            [not_node],
-        )
+    def test_split_text_raises_error_on_non_TextNode_objects(self):
+        with self.assertRaises(TypeError):
+            split_nodes_delimiter(["foo"], None, None)
 
     def test_split_one_inline_node(self):
         node = TextNode("Text with `inline code` in the middle", text_type_text)
@@ -119,11 +116,8 @@ class TestSplitDelimiter(TestSplitBase):
 
 class TestSplitImage(TestSplitBase):
     def test_split_image_just_adds_non_TextNode_objects(self):
-        not_node = "foo"
-        self.assert_split_result(
-            split_nodes_image([not_node]),
-            [not_node],
-        )
+        with self.assertRaises(TypeError):
+            split_nodes_image(["foo"])
 
     def test_split_image_just_adds_TextNode_without_image(self):
         node = TextNode("some text without an image", text_type_text)
@@ -191,12 +185,9 @@ class TestSplitImage(TestSplitBase):
 
 
 class TestSplitLink(TestSplitBase):
-    def test_split_link_just_adds_non_TextNode_objects(self):
-        not_node = "foo"
-        self.assert_split_result(
-            split_nodes_link([not_node]),
-            [not_node],
-        )
+    def test_split_link_raises_error_on_non_TextNode_objects(self):
+        with self.assertRaises(TypeError):
+            split_nodes_link(["foo"])
 
     def test_split_link_just_adds_TextNode_without_link(self):
         node = TextNode("some text without a link", text_type_text)
