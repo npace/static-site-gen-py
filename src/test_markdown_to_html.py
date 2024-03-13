@@ -104,6 +104,13 @@ class TestBlockToHTML(unittest.TestCase):
             "<pre><code>print('hello world!')</code></pre>",
         )
 
+    def test_code_with_newlines(self):
+        self.assertBlockToHtml(
+            "```\nprint('hello')\nprint('world!')\n```",
+            block_type_code,
+            "<pre><code>print('hello')\nprint('world!')\n</code></pre>",
+        )
+
 
 class TestMarkdownToHTML(unittest.TestCase):
     def test_markdown_to_html(self):
@@ -139,8 +146,7 @@ for i in range(1,7):
 """
         expected_html = """<div><h1>heading 1</h1><h2>heading 2</h2><h3>heading 3</h3><h4>heading 4</h4><h5>heading 5</h5><h6>heading 6</h6><p>regular paragraph
 of two lines</p><ul><li>unordered</li><li>list</li></ul><ol><li>ordered</li><li>list</li></ol><blockquote><p>quote of
-two lines</p></blockquote><pre><code>
-for i in range(1,7):
+two lines</p></blockquote><pre><code>for i in range(1,7):
     print(f'"heading {i}"')
 </code></pre></div>"""
         self.assertEqual(

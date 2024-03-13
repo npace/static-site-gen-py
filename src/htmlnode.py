@@ -91,7 +91,9 @@ def text_node_to_html_node(text_node):
     elif text_node.text_type == text_type_italic:
         return LeafNode("i", text_node.text)
     elif text_node.text_type == text_type_code:
-        return LeafNode("code", text_node.text)
+        # leading newline renders in html <pre><code> block so it should be removed
+        stripped_text = text_node.text.lstrip("\n")
+        return LeafNode("code", stripped_text)
     elif text_node.text_type == text_type_link:
         return LeafNode("a", text_node.text, {"href": text_node.url})
     elif text_node.text_type == text_type_image:
