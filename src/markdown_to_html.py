@@ -18,11 +18,6 @@ from htmlnode import LeafNode, ParentNode, text_node_to_html_node
 
 
 def markdown_to_html_node(markdown):
-    # markdown to blocks
-    # wrap in a <div>
-    # each block to html:
-    #   each line of the block into TextNode
-    #   each block into ParentNode with LeafNode for each TextNode
     blocks = text_to_blocks(markdown)
     block_htmls = []
     for block in blocks:
