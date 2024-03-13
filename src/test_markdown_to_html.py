@@ -67,6 +67,13 @@ class TestBlockToHTML(unittest.TestCase):
             "<blockquote><p>some quote\nof two lines</p></blockquote>",
         )
 
+    def test_quote_with_leading_space(self):
+        self.assertBlockToHtml(
+            "> some quote\n> of two lines",
+            block_type_quote,
+            "<blockquote><p>some quote\nof two lines</p></blockquote>",
+        )
+
     def test_unordered_list(self):
         self.assertBlockToHtml(
             "- list\n* of\n- items",
@@ -136,8 +143,8 @@ of two lines
 1. ordered
 2. list
 
->quote of
->two lines
+> quote of
+> two lines
 
 ```
 for i in range(1,7):

@@ -41,16 +41,15 @@ def block_to_html_node(block, block_type):
         leaf_nodes = __block_to_list_item_nodes(block)
         return ParentNode("ol", leaf_nodes)
     elif block_type == block_type_quote:
-        text_nodes = __removed_prefix_block_to_nodes(block, ">", preserve_newlines=True)
+        text_nodes = __quote_block_to_nodes(block)
         leaf_nodes = __text_nodes_to_html(text_nodes)
-        print(f"text nodes: {text_nodes}, leaf nodes: {leaf_nodes}")
         paragraph = ParentNode("p", leaf_nodes)
         return ParentNode("blockquote", [paragraph])
     elif block_type == block_type_code:
         return ParentNode("pre", __block_to_nodes(block))
 
 
-def __removed_prefix_block_to_nodes(block, prefix, preserve_newlines=False):
+def __removed_prefix_block_to_nodes(block, prefix):
     text_nodes = []
     split = block.split("\n")
     line_count = len(split)
@@ -58,7 +57,21 @@ def __removed_prefix_block_to_nodes(block, prefix, preserve_newlines=False):
         line = split[i]
         split_line = line.split(prefix, 1)
         text = split_line[1]
-        if preserve_newlines and i < (line_count - 1):
+        text_nodes.extend(text_to_textnodes(text))
+    return text_nodes
+
+
+def __quote_block_to_nodes(block):
+    text_nodes = []
+    lines = block.split("\n")
+    line_count = len(lines)
+    for i in range(0, line_count):
+        line = lines[i]
+        if line.startswith("> "):
+            text = line.removeprefix("> ")
+        else:
+            text = line.removeprefix(">")
+        if i < (line_count - 1):
             text += "\n"
         text_nodes.extend(text_to_textnodes(text))
     return text_nodes
