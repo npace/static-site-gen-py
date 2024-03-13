@@ -1,8 +1,9 @@
-from textnode import TextNode
+from copy_static_to_public import copy_static_to_public
+
 
 def main():
-    node = TextNode("This is a text node", "bold", "www.someurl.com")
-    print(node)
+    copy_static_to_public()
+
 
 if __name__ == "__main__":
     main()
