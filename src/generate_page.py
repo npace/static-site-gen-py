@@ -2,6 +2,7 @@ from htmlnode import ParentNode
 from markdown_to_html import markdown_to_html_node
 
 import os
+from pathlib import Path
 
 
 def extract_title(page_html_node):
@@ -32,3 +33,15 @@ def generate_page(from_path, template_path, dest_path):
             os.makedirs(dest_dir, exist_ok=True)
             with open(dest_path, "w") as dest_file:
                 dest_file.write(template_content)
+
+
+def generate_pages_recursive(content_dir_path, template_path, dest_dir_path):
+    for entry in os.listdir(content_dir_path):
+        entry_path = os.path.join(content_dir_path, entry)
+        dest_path = os.path.join(dest_dir_path, entry)
+        if os.path.isfile(entry_path):
+            if Path(entry_path).suffix == ".md":
+                html_path = Path(dest_path).with_suffix(".html")
+                generate_page(entry_path, template_path, html_path)
+        else:
+            generate_pages_recursive(entry_path, template_path, dest_path)
