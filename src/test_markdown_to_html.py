@@ -83,9 +83,9 @@ class TestBlockToHTML(unittest.TestCase):
 
     def test_unordered_list_with_inline_styles(self):
         self.assertBlockToHtml(
-            "- **list**\n* *of*\n- `items`\n- [link](https://www.example.com)\n- ![image](https://example.com/image.jpg)",
+            "- **list**\n* *of*\n- some `items` with `code`\n- [link](https://www.example.com)\n- ![image](https://example.com/image.jpg)",
             block_type_unordered_list,
-            "<ul><li><b>list</b></li><li><i>of</i></li><li><code>items</code></li>"
+            "<ul><li><b>list</b></li><li><i>of</i></li><li>some <code>items</code> with <code>code</code></li>"
             + '<li><a href="https://www.example.com">link</a></li><li><img src="https://example.com/image.jpg" alt="image"></img></li></ul>',
         )
 
@@ -98,10 +98,9 @@ class TestBlockToHTML(unittest.TestCase):
 
     def test_ordered_list_with_inline_styles(self):
         self.assertBlockToHtml(
-            "1. **list**\n2. *of*\n3. `items`\n4. [link](https://www.example.com)\n5. ![image](https://example.com/image.jpg)",
+            "1. **list**\n2. *of*\n3. some `items` with `code`\n4. [link](https://www.example.com)\n5. ![image](https://example.com/image.jpg)",
             block_type_ordered_list,
-            "<ol><li><b>list</b></li><li><i>of</i></li><li><code>items</code></li>"
-            + '<li><a href="https://www.example.com">link</a></li><li><img src="https://example.com/image.jpg" alt="image"></img></li></ol>',
+            '<ol><li><b>list</b></li><li><i>of</i></li><li>some <code>items</code> with <code>code</code></li><li><a href="https://www.example.com">link</a></li><li><img src="https://example.com/image.jpg" alt="image"></img></li></ol>',
         )
 
     def test_code(self):

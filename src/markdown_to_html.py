@@ -87,10 +87,14 @@ def __text_nodes_to_html(text_nodes):
 
 
 def __block_to_list_item_nodes(block):
-    text_nodes = __removed_prefix_block_to_nodes(block, " ")
-    return list(
-        map(lambda n: ParentNode("li", [text_node_to_html_node(n)]), text_nodes)
-    )
+    block_lines = block.split("\n")
+    list_item_html_nodes = []
+    for line in block_lines:
+        line_nodes = __removed_prefix_block_to_nodes(line, " ")
+        line_nodes_html = __text_nodes_to_html(line_nodes)
+        line_item_html_node = ParentNode("li", line_nodes_html)
+        list_item_html_nodes.append(line_item_html_node)
+    return list_item_html_nodes
 
 
 __header_types_dict = {
